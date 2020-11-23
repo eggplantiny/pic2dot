@@ -15,7 +15,7 @@ class App {
 
         //  Image Settings
         this.image = new Image()
-        this.image.src = '/static/starry_night.jpg'
+        this.image.src = 'images/starry_night.jpg'
         this.image.onload = () => {
             this.isLoaded = true
             this.drawImage()
