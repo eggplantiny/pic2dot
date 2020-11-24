@@ -15,15 +15,15 @@ class App {
 
         //  Image Settings
         this.image = new Image()
-        this.image.src = 'images/starry_night2.jpg'
+        this.image.src = 'images/2.jpg'
         this.image.onload = () => {
             this.isLoaded = true
             this.drawImage()
         }
 
         //  Dot Settings
-        this.radius = 7
-        this.pixelSize = 16
+        this.radius = 4
+        this.pixelSize = 10
         this.dots = []
         this.maxCalc = 0
 
