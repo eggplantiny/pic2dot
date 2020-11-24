@@ -22,9 +22,10 @@ class App {
         }
 
         //  Dot Settings
-        this.radius = 12
-        this.pixelSize = 28
+        this.radius = 7
+        this.pixelSize = 16
         this.dots = []
+        this.maxCalc = 0
 
         //  Ripple
         this.ripple = new Ripple()
@@ -112,8 +113,6 @@ class App {
         this.columns = Math.ceil(this.stageWidth / this.pixelSize)
         this.rows = Math.ceil(this.stageHeight / this.pixelSize)
 
-        console.log(this.imgData)
-
         for (let i = 0; i < this.rows; i++) {
             const y = (i + 0.5) * this.pixelSize
             const pixelY = Math.max(Math.min(y, this.stageHeight), 0)
@@ -128,7 +127,6 @@ class App {
                 const blue  = this.imgData.data[pixelIndex + 2]
 
                 const dot = new Dot(x, y, this.radius, this.pixelSize, red, green, blue)
-                console.log(dot)
 
                 this.dots.push(dot)
             }
@@ -139,12 +137,19 @@ class App {
         window.requestAnimationFrame(this.animate.bind(this))
 
         this.ripple.animate()
+        const caculatingDots = this.dots.filter(dot => dot.state === 'PROCESSING').length
+        if (caculatingDots > this.maxCalc) {
+            this.maxCalc = caculatingDots
+        }
+        console.log(`caculating : ${caculatingDots}, max : ${this.maxCalc}`)
 
         for (let c = 0; c < this.dots.length; c++) {
             const dot = this.dots[c]
 
-            if (collide(dot.x, dot.y, this.ripple.x, this.ripple.y, this.ripple.radius)) {
-                dot.animate(this.ctx)
+            if (!dot.isFinished()) {
+                if (collide(dot.x, dot.y, this.ripple.x, this.ripple.y, this.ripple.radius)) {
+                    dot.animate(this.ctx)
+                }
             }
         }
     }

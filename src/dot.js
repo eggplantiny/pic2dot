@@ -1,6 +1,12 @@
 const PI2 = Math.PI * 2
 const BOUNCE = 0.82
 
+const stateEnum = {
+    IDLE: 'IDLE',
+    PROCESSING: 'PROCESSING',
+    FINISHED: 'FINISHED'
+}
+
 export class Dot {
     constructor (x, y, radius, pixelSize, red, green, blue) {
         this.x = x
@@ -13,9 +19,16 @@ export class Dot {
         this.red = red
         this.green = green
         this.blue = blue
+        this.state = stateEnum.IDLE
     }
 
     animate (ctx) {
+        if (this.state === stateEnum.IDLE) {
+            this.state = stateEnum.PROCESSING
+        } else if (this.state === stateEnum.PROCESSING && Math.abs(this.radiusV) < 0.1) {
+            this.state = stateEnum.FINISHED
+        }
+
         ctx.beginPath()
         ctx.fillStyle = '#000'
         ctx.fillRect(
@@ -37,5 +50,15 @@ export class Dot {
     reset () {
         this.radius = 0
         this.radiusV = 0
+        this.state = stateEnum.IDLE
+    }
+
+    isFinished () {
+        return this.state === stateEnum.FINISHED
+    }
+
+    log () {
+        const { radiusV, radius, x, y } = this
+        console.log({ radiusV, radius, x, y })
     }
 }
